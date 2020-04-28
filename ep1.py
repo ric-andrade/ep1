@@ -7,7 +7,7 @@ np.set_printoptions(precision=4)  # Limitar precisão dos dados. Obs.: Só afeta
 
 def main():
     """Função principal responsável por chamar as demais funções contidas nesse programa,
-    executando, assim, o exercício programa."""
+    executando, assim, o algoritmo."""
 
     global n    # Definição da variável global "n" que será utilizada em diversas funções neste programa.
     global gr   # Definição da variável global "gr" que será utilizada como parâmetro para plotar ou não os gráficos.
@@ -65,8 +65,13 @@ def main():
 
 
 def plot(v_aprox, v_exato, teste):
-    """ Função "plot". Recebe os parâmetros "v_aprox", "v_exato" e "teste".
-    É responsável por plotar os gráficos deste programa. """
+    """ Função "plot". Recebe três argumentos, sendo responsável por plotar os gráficos deste programa.
+
+    Arguments:
+        v_aprox {list} -- vetor de temperaturas aproximadas
+        v_exato {list} -- vetor de temperaturas exatas esperadas
+        teste {string} -- variável que contém o tipo de teste que o usuário deseja executar
+    """    
 
     if teste != "c":
         position = []               # Plot do gráfico para os itens A e B.
@@ -116,9 +121,15 @@ def plot(v_aprox, v_exato, teste):
 
 
 def decomp(vet1, vet2):
-    """ Função "decomp". Recebe dois vetores que representam a diagonal principal e subdiagonal de uma matriz A
-     tridiagonal simétrica e retorna outros dois vetores que representam as matrizes D e L que respeitam
-     a seguinte relação: A = LDL^t """
+    """ Função "decomp". Recebe dois argumentos e é responsável por decompor a matriz A em outras três matrizes (L, D e L^t) que podem ser representadas por dois vetores "vet_d" e "vet_l". A matriz A deve ser tridiagonal simétrica contendo valores nulos em posições diferentes da diagonal principal e das duas subdiagonais. A decomposição respeita a seguinte relação: A = LDL^t.
+
+    Arguments:
+        vet1 {list} -- vetor que representa a diagonal principal da matriz A
+        vet2 {list} -- vetor que representa as duas subdiagonais da matriz A
+
+    Returns:
+        list -- lista composta pelos vetores "vet_d" e "vet_l" que representam a matriz A decomposta
+    """    
 
     vet_d = crie_vetor(len(vet1))
     vet_l = crie_vetor(len(vet2))
@@ -136,9 +147,17 @@ def decomp(vet1, vet2):
 
 
 def solve_sys(unew, vet_l, vet_d, vet_dir):
-    """ Função "solve_sys". Recebe 4 vetores que caracterizam um sistema do tipo:
-     LDL^t x = b, onde: 'vet_l' representa a matriz L; 'vet_d' representa a matriz D; 'vet_dir' representa
-     a matriz b e 'unew' representa a matriz x. Retorna o vetor solução do sistema 'unew'. """
+    """ Função "solve_sys". Recebe quatro argumentos que caracterizam um sistema do tipo LDL^t x = b, e retorna o vetor solução "x" deste sistema.
+
+    Arguments:
+        unew {list} -- vetor incógnita do sistema linear "x"
+        vet_l {list} -- vetor que representa a matriz L
+        vet_d {list} -- vetor que representa a matriz D
+        vet_dir {list} -- vetor coluna que representa o lado direito da equação matricial "b"
+
+    Returns:
+        list -- vetor incógnita do sistema linear "x"
+    """    
 
     y = crie_vetor(n - 1)  # Resolução do sistema Ly = b
 
@@ -162,8 +181,16 @@ def solve_sys(unew, vet_l, vet_d, vet_dir):
 
 
 def sol_exata(t, x, teste):
-    """ Função "sol_exata". Recebe os parâmetros "t", "x" e "teste" e retorna um número real
-    correspondente à expressão determinada pelo teste que o usuário deseja rodar. """
+    """ Função "sol_exata". Recebe três argumentos e retorna o valor da solução exata para determinado teste.
+
+    Arguments:
+        t {float} -- variável temporal
+        x {float} -- variável espacial
+        teste {string} -- variável que contém o tipo de teste que o usuário deseja executar
+
+    Returns:
+        float -- valor da solução exata correspondente ao teste que o usuário deseja executar 
+    """    
 
     if teste == "a":
         # return 10*t*x**2 * (x - 1)
@@ -174,8 +201,18 @@ def sol_exata(t, x, teste):
 
 
 def vetor_exato(vetor, m, t, k, teste):
-    """ Função "vetor_exato". Recebe os parâmetros "vetor", "m", "t", "k" e "teste" retornando
-    o vetor de resultado exato para o instante k. """
+    """ Função "vetor_exato". Recebe cinco argumentos e retorna o vetor exato da solução da equação do calor para um instante tk.
+
+    Arguments:
+        vetor {list} -- vetor que será preenchido
+        m {float} -- parâmetro do problema
+        t {float} -- variável temporal
+        k {int} -- parâmetro do problema
+        teste {string} -- variável que contém o tipo de teste que o usuário deseja executar
+
+    Returns:
+        list -- vetor exato para determinado instante de tempo tk
+    """    
 
     delta_x = 1 / n
     delta_t = t / m
@@ -188,8 +225,16 @@ def vetor_exato(vetor, m, t, k, teste):
 
 
 def fonte(x, t, teste):
-    """ Função "fonte". Recebe os parâmetros "x", "t" e "teste" retornando um número real
-    correspondente à expressão determinada pelo teste que o usuário deseja rodar. """
+    """ Função "fonte". Recebe três argumentos e retorna o valor da função fonte correspondente ao teste que o usuário deseja executar.
+
+    Arguments:
+        x {float} -- variável espacial
+        t {float} -- variável temporal
+        teste {string} -- variável que contém o tipo de teste que o usuário deseja executar
+
+    Returns:
+        float -- valor da função fonte correspondente ao teste que o usuário deseja executar 
+    """    
 
     p = 0.25
     delta_x = 1 / n
@@ -210,10 +255,19 @@ def fonte(x, t, teste):
 
 
 def u(vetor, m, t, lda, met, teste):
-    """ Função "u". Recebe os parâmetros "vetor", "m", "t" e "teste" retornando um vetor
-    de resultados aproximados para o instante tM (t=1) pelo método da discretização.
-     Além disso, essa função executa os plots dos gráficos para os instantes de tempo
-     indo de t=0.1s até t=0.9s. """
+    """ Função "u". Recebe seis argumentos e é responsável por executar algum método determinado pelo usuário, retornando o vetor aproximado dos valores das temperaturas no instante tM, isto é, no útlimo instante, referente à equação do calor. 
+
+    Arguments:
+        vetor {list} -- vetor que contém a condição de contorno u0
+        m {float} -- parâmetro do problema
+        t {float} -- intervalo de tempo desejado "T"
+        lda {float} -- parâmetro do problema
+        met {string} -- variável que determina qual o método que o usuário deseja executar
+        teste {string} -- variável que contém o tipo de teste que o usuário deseja executar
+
+    Returns:
+        list -- vetor de resultados aproximados para o instante tM
+    """    
 
     uold = vetor.copy()          # Recebe o parâmetro "vetor" que contém a condição de contorno u0 (primeira linha)
     unew = crie_vetor(len(vetor))
@@ -225,8 +279,7 @@ def u(vetor, m, t, lda, met, teste):
         for k in range(m):
             i = 1
             while i < n:
-                unew[i] = uold[i] + delta_t * ((uold[i - 1] - 2*uold[i] + uold[i + 1])/delta_x**2
-                                               + fonte(i*delta_x, k*delta_t, teste))
+                unew[i] = uold[i] + delta_t * ((uold[i - 1] - 2*uold[i] + uold[i + 1])/delta_x**2 + fonte(i*delta_x, k*delta_t, teste))
                 i += 1
             unew[0] = g1((k + 1) * delta_t, teste)
             unew[n] = g2((k + 1) * delta_t, teste)
@@ -374,8 +427,15 @@ def u(vetor, m, t, lda, met, teste):
 
 
 def u0(x, teste):
-    """ Função "u0". Recebe os parâmetros "x" e "teste" retornando um número real correspondente
-    à condição inicial temporal (t = 0) do problema para cada posição. """
+    """ Função "u0". Recebe dois parâmetros e retorna o valor da temperatura correspondente ao instante t=0.
+
+    Arguments:
+        x {float} -- variável espacial
+        teste {string} -- variável que contém o tipo de teste que o usuário deseja executar
+
+    Returns:
+        float -- valor da temperatura correspondente à condição inicial temporal (t=0)
+    """    
 
     if teste == "a":
         # return 0 * x
@@ -389,8 +449,15 @@ def u0(x, teste):
 
 
 def g1(t, teste):
-    """ Função "g1". Recebe os parâmetros "t" e "teste" retornando um número real correspondente
-    à condição de contorno espacial (x = 0) do problema para cada instante. """
+    """ Função "g1". Recebe dois parâmetros e retorna o valor da temperatura correspondente à posição x=0.
+
+    Arguments:
+        t {float} -- variável temporal
+        teste {string} -- variável que contém o tipo de teste que o usuário deseja executar
+
+    Returns:
+        float -- valor da temperatura correspondente à condição inicial espacial (x=0)
+    """    
 
     if teste == "a":
         # return 0 * t
@@ -404,8 +471,15 @@ def g1(t, teste):
 
 
 def g2(t, teste):
-    """ Função "g2". Recebe os parâmetros "t" e "teste" retornando um número real correspondente
-    à condição de contorno espacial (x = L, onde L é a posição final da barra) do problema. """
+    """ Função "g2". Recebe dois parâmetros e retorna o valor da temperatura correspondente à posição x=L, onde L é a posição final barra (L=1).
+
+    Arguments:
+        t {float} -- variável temporal
+        teste {string} -- variável que contém o tipo de teste que o usuário deseja executar
+
+    Returns:
+        float -- valor da temperatura correspondente à condição final espacial (x=1)
+    """    
 
     if teste == "a":
         # return 0 * t
@@ -419,8 +493,14 @@ def g2(t, teste):
 
 
 def crie_vetor(n_colunas):
-    """ Função "crie_vetor". Recebe o parâmetro "n_colunas" retornando um vetor nulo
-    de dimensão n+1. """
+    """ Função "crie_vetor". Recebe um único parâmetro e retorna um vetor nulo.
+
+    Arguments:
+        n_colunas {int} -- número de colunas ou dimensão do vetor
+
+    Returns:
+        list -- vetor nulo
+    """    
 
     vetor = []
     for j in range(n_colunas):
@@ -431,8 +511,15 @@ def crie_vetor(n_colunas):
 
 
 def contorno(vetor, teste):
-    """ Função "contorno". Recebe os parâmetros "vetor" e "teste" retornando um vetor
-    correspondente à condição de contorno do problema. É determinada pelo teste que o usuário deseja rodar. """
+    """ Função "contorno". Recebe dois parâmetros e retorna um vetor com as condições de contorno aplicadas.
+
+    Arguments:
+        vetor {list} -- vetor nulo que será preenchido
+        teste {string} -- variável que contém o tipo de teste que o usuário deseja executar
+
+    Returns:
+        list -- vetor com as condições de contorno do problema
+    """    
 
     delta_x = 1 / n
 
